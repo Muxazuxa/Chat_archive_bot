@@ -1,14 +1,10 @@
 from telegram.error import NetworkError, Unauthorized
 
-from datetime import date, timedelta
-from config import *
+from datetime import date
+from config import TOKEN
 from time import sleep
-from email import encoders
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-import smtplib, ssl
-import os, telegram
-import schedule
+import os
+import telegram
 
 update_id = None
 
@@ -22,44 +18,14 @@ def main():
     except IndexError:
         update_id = None
 
-    schedule.every().day.at('00:00').do(send_archives)
-
     while True:
         try:
             echo(bot)
-            schedule.run_pending()
         except NetworkError:
             sleep(1)
+        # The user has removed or blocked the bot.
         except Unauthorized:
             update_id += 1
-
-
-def send_archives():
-
-    yesterday = date.today() - timedelta(days=1)
-
-    msg = MIMEMultipart()
-    msg['Subject'] = 'Archives for ' + yesterday.strftime('%d_%m_%Y')
-    msg['From'] = EMAIL_HOST_USER
-    msg['To'] = EMAIL_HOST_RECEIVER
-
-    if len(os.listdir('archives')):
-        for filename in os.listdir('archives'):
-            with open(os.path.join('archives', filename), 'rb') as attachment:
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(attachment.read())
-                encoders.encode_base64(part)
-                part.add_header(
-                    "Content-Disposition",
-                    f"attachment; filename={filename}",
-                )
-                msg.attach(part)
-            os.unlink(os.path.join('archives', filename))
-
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT, context=context) as server:
-        server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
-        server.sendmail(EMAIL_HOST_USER, EMAIL_HOST_RECEIVER, msg.as_string())
 
 
 def echo(bot):
