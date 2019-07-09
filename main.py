@@ -1,6 +1,6 @@
 from telegram.error import NetworkError, Unauthorized
 
-from datetime import date
+from datetime import date, timedelta
 from config import *
 from time import sleep
 from email import encoders
@@ -35,8 +35,11 @@ def main():
 
 
 def send_archives():
+
+    yesterday = date.today() - timedelta(days=1)
+
     msg = MIMEMultipart()
-    msg['Subject'] = 'Archives for ' + date.today().strftime('%d_%m_%Y')
+    msg['Subject'] = 'Archives for ' + yesterday.strftime('%d_%m_%Y')
     msg['From'] = EMAIL_HOST_USER
     msg['To'] = EMAIL_HOST_RECEIVER
 
@@ -51,7 +54,6 @@ def send_archives():
                     f"attachment; filename={filename}",
                 )
                 msg.attach(part)
-
             os.unlink(os.path.join('archives', filename))
 
     context = ssl.create_default_context()
@@ -69,12 +71,14 @@ def echo(bot):
 
         if update.message:
             today = date.today().strftime("%d_%m_%Y_")
-            group_name = str(update.message.chat.title).replace(" ", "_")
-            message = str(update.message.text)
+            try:
+                group_name = update.message.chat.title.replace(" ", "_")
+            except:
+                group_name = update.message.from_user.first_name
+            message = update.message.text
             user = update.message.from_user.first_name
-            f = open(os.path.join('archives', today + group_name + '.txt'), "a+")
-            f.write(user + ': ' + message + '\n')
-            f.close()
+            with open(os.path.join('archives', today + group_name + '.txt'), "a+") as f:
+                f.write(user + ': ' + message + '\n')
 
 
 if __name__ == '__main__':
