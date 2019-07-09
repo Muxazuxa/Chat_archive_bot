@@ -1,6 +1,6 @@
 #### Telegram bot for archivating group's chat and sending archives to emailbox
 
-####Installation
+#### Installation
 
 > Activate virtual environment with command `source env/bin/activate`
 
