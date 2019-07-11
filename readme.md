@@ -2,8 +2,4 @@
 
 #### Installation
 
-> Activate virtual environment with command `source env/bin/activate`
-
-> Install all dependencies `pip3 install -r requirements.txt`
-
-> Run bot `python3 main.py`
+> run Docker with command `docker-compose up`
