@@ -39,7 +39,7 @@ def echo(bot):
             today = date.today().strftime("%d_%m_%Y_")
             try:
                 group_name = update.message.chat.title.replace(" ", "_")
-            except:
+            except ValueError:
                 group_name = update.message.from_user.first_name
             message = update.message.text
             user = update.message.from_user.first_name
