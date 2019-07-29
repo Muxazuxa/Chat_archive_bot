@@ -2,7 +2,7 @@
 
 ## Description
 
-Add bot to telegram chat.
+Add bot to telegram chat, bot archivates all messages to file and send to emailbox.
 
 ## Installation
 
