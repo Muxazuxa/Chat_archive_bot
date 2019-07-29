@@ -1,4 +1,4 @@
-# Telegram bot for archivating group's chat and sending archives to emailbox
+# Archivating chat bot
 
 ## Description
 
