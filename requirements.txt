@@ -4,7 +4,7 @@ billiard==3.6.0.0
 celery==4.3.0
 certifi==2019.6.16
 cffi==1.12.3
-cryptography==2.7
+cryptography==3.2
 future==0.17.1
 kombu==4.6.3
 pycparser==2.19
